@@ -12,10 +12,12 @@ A screening tool for local authorities. It lists homes on the market that would 
 
 For each home, the saving compares:
 
-- **Owning it:** PWLB borrowing repaid as an annuity, management and maintenance at a share of LHA rent, less rent at the current LHA rate for the postcode and bedroom size.
+- **Owning it:** PWLB interest at the certainty rate for a 40-year maturity loan, plus minimum revenue provision at 2.5% of capital a year, plus management and maintenance at a share of LHA rent, less rent at the current LHA rate for the postcode and bedroom size.
 - **The nightly-paid placement it replaces:** the area's average gross cost per household per night, less Housing Benefit subsidy at 90% of the January 2011 LHA rate, capped at £500 a week in inner and central London and £375 elsewhere.
 
 ## Data sources
+
+- **PWLB rate:** read live each time the page opens from `rates.json`, which [haverly-rates-automation](https://github.com/nhaverly/haverly-rates-automation) refreshes from the DMO's published standard rates each working day. The page applies the 0.20% certainty discount. If the file can't be reached, it uses the last rate built into the page and says so.
 
 - **Listings:** sample properties at real postcodes. Prices, works costs, floor areas and EPC ratings are illustrative.
 - **LHA rates:** 2026/27 and January 2011 weekly rates for each postcode, from the Valuation Office Agency's LHA Direct.
