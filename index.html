@@ -177,7 +177,7 @@ footer p{margin:0}
     </div>
     <div class="card">
       <div class="card-head">
-        <div><h3>Ranked by net annual saving</h3><p class="note">Select a column heading to sort. Homes below the minimum EPC rating are left out.</p></div>
+        <div><h3>Ranked by net annual saving</h3><p class="note">Net cost of owning is borrowing repayments plus management and maintenance, less rent. The nightly-paid equivalent is a year of the placement it replaces, less Housing Benefit subsidy. The saving is the difference. Select a column heading to sort.</p></div>
         <label class="inline"><input type="checkbox" id="show-miss"> Show homes with no saving</label>
       </div>
       <div class="tablebox">
@@ -191,6 +191,8 @@ footer p{margin:0}
             <th class="n opt"><button type="button" data-sort="lha">LHA now /wk</button></th>
             <th class="n opt"><button type="button" data-sort="nightly">TA /night</button></th>
             <th class="n opt"><button type="button" data-sort="subWk">Subsidy /wk</button></th>
+            <th class="n"><button type="button" data-sort="ownNet">Net cost of owning /yr</button></th>
+            <th class="n"><button type="button" data-sort="taNet">Nightly-paid equivalent /yr</button></th>
             <th class="n"><button type="button" data-sort="saving">Saving /yr</button></th>
             <th class="n opt"><button type="button" data-sort="breakeven">Break-even /night</button></th>
           </tr></thead>
@@ -274,7 +276,7 @@ function appraise(l, a, cost){
   return {
     id:l.listing_id, property:l.beds+' bed '+l.property_type.toLowerCase()+', '+l.postcode, borough:l.borough, region:l.region,
     asking_price:l.asking_price, epc:l.epc, lha:l.lha_2026_weekly, nightly, subWk,
-    capital:Math.round(capital), saving:Math.round(saving), breakeven:Math.round((ownNet+subWk*52)/365),
+    capital:Math.round(capital), ownNet:Math.round(ownNet), taNet:Math.round(nightly*365 - subWk*52), saving:Math.round(saving), breakeven:Math.round((ownNet+subWk*52)/365),
     meets: saving > a.min_annual_saving,
   };
 }
@@ -355,7 +357,7 @@ function renderTable(){
     if (va == null && vb == null) return 0; if (va == null) return 1; if (vb == null) return -1;
     return (typeof va === 'string' ? va.localeCompare(vb) : va - vb) * dir;
   });
-  if (!rows.length) { const td = el('td', {colSpan:10, className:'note', textContent:'No homes in the chosen areas create a saving.'}); tb.append(el('tr', {}, td)); return; }
+  if (!rows.length) { const td = el('td', {colSpan:12, className:'note', textContent:'No homes in the chosen areas create a saving.'}); tb.append(el('tr', {}, td)); return; }
   rows.forEach(x => {
     const tr = el('tr', {className: x.meets ? '' : 'miss'});
     const td = (t, c) => tr.append(el('td', {className:c||'', textContent:t}));
@@ -363,6 +365,7 @@ function renderTable(){
     const p = el('td', {textContent:x.property}); if (!x.meets) p.append(el('span', {className:'why', textContent:'Costs more than nightly-paid TA'})); tr.append(p);
     td(x.borough); td(gbp(x.asking_price), 'n'); td(x.epc || '–');
     td(gbp2(x.lha), 'n opt'); td(gbp(x.nightly), 'n opt'); td(gbp2(x.subWk), 'n opt');
+    td(gbp(x.ownNet), 'n'); td(gbp(x.taNet), 'n');
     td(gbp(x.saving), 'n save'); td(gbp(x.breakeven), 'n opt');
     tb.append(tr);
   });
@@ -393,7 +396,7 @@ $('epc-min').addEventListener('change', e => { state.epc = e.target.value; updat
 $('show-miss').addEventListener('change', e => { state.misses = e.target.checked; renderTable(); });
 document.querySelectorAll('th button[data-sort]').forEach(b => b.addEventListener('click', () => {
   const key = b.dataset.sort;
-  state.sort = state.sort.key === key ? {key, dir:-state.sort.dir} : {key, dir: ['saving','asking_price','lha','nightly','subWk','breakeven'].includes(key) ? -1 : 1};
+  state.sort = state.sort.key === key ? {key, dir:-state.sort.dir} : {key, dir: ['saving','ownNet','taNet','asking_price','lha','nightly','subWk','breakeven'].includes(key) ? -1 : 1};
   renderTable();
 }));
 
