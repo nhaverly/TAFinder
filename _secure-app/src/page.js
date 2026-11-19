@@ -212,7 +212,7 @@ footer p{margin:0}
         <div class="field"><label for="a-nightly_mode">Nightly-paid cost</label><select id="a-nightly_mode"><option value="area">Average for the area the home is in</option><option value="own">Our own nightly cost</option></select></div>
         <div class="field"><label for="a-nightly_own_rate">Our own nightly cost (£ per household per night)</label><input id="a-nightly_own_rate" type="number" min="0" max="1000" step="1"></div>
         <div class="field"><label for="a-nightly_cost_outside_london">Nightly cost outside London (£)</label><input id="a-nightly_cost_outside_london" type="number" min="0" max="1000" step="1"><span class="hint">Used for areas with no published average.</span></div>
-        <div class="field"><label for="a-subsidy_pct_of_2011_lha">Housing Benefit subsidy (% of January 2011 LHA)</label><input id="a-subsidy_pct_of_2011_lha" type="number" min="0" max="100" step="1"><span class="hint">Capped at £500 a week in inner London and £375 elsewhere.</span></div>
+        <div class="field"><label for="a-subsidy_pct_of_2011_lha">Housing Benefit subsidy (% of January 2011 LHA)</label><input id="a-subsidy_pct_of_2011_lha" type="number" min="0" max="100" step="1"><span class="hint">Capped at £500 a week in central and inner London and Outer South West London, and £375 elsewhere.</span></div>
         <div class="field"><label for="a-min_annual_saving">Show homes saving more than (£ a year)</label><input id="a-min_annual_saving" type="number" min="0" step="500"></div>
       </div>
     </div>
@@ -427,7 +427,7 @@ footer p{margin:0}
     $('m-ta').replaceChildren(...[
       ...r('Nightly-paid cost', a.nightly_mode === 'own' ? gbp(a.nightly_own_rate) + ' a night (your rate)' : 'Average for the area'),
       ...r('Outside London (assumed)', gbp(a.nightly_cost_outside_london) + ' a night'), ...r('Housing Benefit subsidy', a.subsidy_pct_of_2011_lha + '% of January 2011 LHA'),
-      ...r('Weekly subsidy cap', '£500 inner London, £375 elsewhere')].flat());
+      ...r('Weekly subsidy cap', '£500 central, inner and Outer South West London; £375 elsewhere')].flat());
   }
   async function loadAss() { const r = await api('/api/assumptions'); S.ass = r.assumptions; S.rate = r.rate; renderAss(); }
   ['pwlb_mode', 'nightly_mode'].forEach((k) => $('a-' + k).addEventListener('change', (e) => { S.ass[k] = e.target.value; renderAss(); }));

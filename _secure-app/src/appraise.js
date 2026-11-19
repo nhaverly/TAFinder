@@ -50,9 +50,9 @@ export function cleanAssumptions(input) {
   return { out, errors };
 }
 
-// Inner and central London BRMAs take the £500 weekly subsidy cap; elsewhere £375.
+// The £500 weekly subsidy cap applies in these seven BRMAs; elsewhere £375 (DWP HB Subsidy Guidance Manual, s.6, paras 624-625).
 const CAP500 = new Set(['Central London', 'Inner East London', 'Inner North London',
-  'Inner South East London', 'Inner South West London', 'Inner West London']);
+  'Inner South East London', 'Inner South West London', 'Inner West London', 'Outer South West London']);
 
 export function appraise(l, a, rate, nightlyByArea) {
   const capital = l.asking_price * (1 + a.purchase_costs_pct / 100) + l.works_cost;
