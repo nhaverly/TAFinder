@@ -1,0 +1,20 @@
+{
+  // TA Acquisition Finder: secure version for named council officers.
+  "name": "ta-finder",
+  "main": "src/index.js",
+  "compatibility_date": "2026-10-01",
+  "workers_dev": true,
+  "preview_urls": false,
+  "observability": { "enabled": true },
+  "d1_databases": [
+    { "binding": "DB", "database_name": "ta-finder", "database_id": "c436c94d-e322-4547-b578-60971dd8f5f7" }
+  ],
+  "vars": {
+    // Filled in after Cloudflare Access is switched on (see README):
+    // TEAM_DOMAIN is your Zero Trust team domain, POLICY_AUD the Access application's audience tag.
+    "TEAM_DOMAIN": "",
+    "POLICY_AUD": "",
+    "PWLB_FALLBACK_PCT": "6.38",
+    "PWLB_FALLBACK_AS_OF": "2026-10-30"
+  }
+}
